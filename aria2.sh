@@ -230,14 +230,14 @@ rm -rf /usr/share/man/man1/aria2c.1/man-aria2c
 rm -rf /usr/share/man/man1/aria2c.1
 rm -rf /etc/ssl/certs/ca-certificates.crt 
 rm -rf ${aria2_path}/aria2.session
-rm -rf ${aria2_path}/aria2.log"
+rm -rf ${aria2_path}/aria2.log
 rm -rf ${aria2_path}/aria2.conf
 rm -rf ${aria2_path}/start.sh
 rm -rf /usr/lib/systemd/system/aria2.service
 rm -rf /etc/init.d/aria2c
 echo "解除安裝完成"
-	read -p "Press any key to continue." var
-	clear
+read -p "Press any key to continue." var
+clear
 	;;
 	8)
 	read -p "Press any key to continue." var
