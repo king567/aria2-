@@ -7,8 +7,9 @@ echo "(3).停止aria2"
 echo "(4).將aria2加入開機啟動 for Centos7"
 echo "(5).將aria2加入開機啟動 for Ubuntu"
 echo "(6).編輯aria2設定檔"
-echo "(7).離開"
-read -p "請輸入選項(1-7):" option
+echo "(7).解除安裝aria2"
+echo "(8).離開"
+read -p "請輸入選項(1-8):" option
 touch="/bin/touch"
 wget="/usr/bin/wget"
 aria2_path="/root/.aria2"
@@ -220,6 +221,25 @@ vim ${aria2_path}/aria2.conf
 wait
 	;;
 	7)
+killall aria2c
+wait
+killall aria2c
+wait
+rm -rf /usr/bin/aria2c
+rm -rf /usr/share/man/man1/aria2c.1/man-aria2c
+rm -rf /usr/share/man/man1/aria2c.1
+rm -rf /etc/ssl/certs/ca-certificates.crt 
+rm -rf ${aria2_path}/aria2.session
+rm -rf ${aria2_path}/aria2.log"
+rm -rf ${aria2_path}/aria2.conf
+rm -rf ${aria2_path}/start.sh
+rm -rf /usr/lib/systemd/system/aria2.service
+rm -rf /etc/init.d/aria2c
+echo "解除安裝完成"
+	read -p "Press any key to continue." var
+	clear
+	;;
+	8)
 	read -p "Press any key to continue." var
 	clear
 break
