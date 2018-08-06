@@ -269,7 +269,11 @@ Exit ()
 	read -p "Press any key to continue." var
 break
 }
-
+Update_script ()
+{
+wget --no-check-certificate -qO- https://raw.githubusercontent.com/king567/aria2-one-click-byWIJ/master/aria2.sh > $0
+echo -e ${greenf}"\n更新成功\n"${reset}
+}
 echo "(1).安裝aria2"
 echo "(2).啟動aria2"
 echo "(3).停止aria2"
@@ -277,7 +281,8 @@ echo "(4).將aria2加入開機啟動 for Centos7"
 echo "(5).將aria2加入開機啟動 for Ubuntu"
 echo "(6).編輯aria2設定檔"
 echo "(7).解除安裝aria2"
-echo "(8).離開"
+echo "(8).更新腳本"
+echo "(9).離開"
 read -p "請輸入選項(1-8):" option
     case ${option} in
        1)
@@ -302,6 +307,9 @@ read -p "請輸入選項(1-8):" option
 			Uninstall
          ;;
        8)
+			Update_script
+         ;;
+       9)
 			Exit
          ;;
        *)
