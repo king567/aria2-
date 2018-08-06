@@ -100,10 +100,10 @@ initializeANSI()
 initializeANSI
 Install_Aria2 ()
 {
-wget https://github.com/king567/Aria2-static-build-128-thread/releases/download/${New_Aria2_Version}/aria2-${New_Aria2_Version}-static-build-128-thread.tar.gz
+wget https://github.com/king567/Aria2-static-build-128-thread/releases/download/${New_Aria2_Version}/aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
 wait
-tar -zxvf aria2-${New_Aria2_Version}-static-build-128-thread.tar.gz
-mv aria2-${New_Aria2_Version}-static-build-128-thread aria2
+tar -zxvf aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
+mv aria2-v${New_Aria2_Version}-static-build-128-thread aria2
 cd aria2
 wait
 sh install.sh
