@@ -246,6 +246,6 @@ clear
 	clear
 break
 	;;
-esac
 
+esac
 done
