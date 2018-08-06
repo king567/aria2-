@@ -1,53 +1,15 @@
 #!/bin/bash
-until false 
-do
-echo "(1).安裝aria2"
-echo "(2).啟動aria2"
-echo "(3).停止aria2"
-echo "(4).將aria2加入開機啟動 for Centos7"
-echo "(5).將aria2加入開機啟動 for Ubuntu"
-echo "(6).編輯aria2設定檔"
-echo "(7).解除安裝aria2"
-echo "(8).離開"
-read -p "請輸入選項(1-8):" option
+
+###########################變數
 touch="/bin/touch"
 wget="/usr/bin/wget"
 aria2_path="/root/.aria2"
-case ${option} in
-	1)
-wget https://github.com/q3aql/aria2-static-builds/releases/download/v1.33.1/aria2-1.33.1-linux-gnu-64bit-build1.tar.bz2
-wait
-tar -jxvf aria2-1.33.1-linux-gnu-64bit-build1.tar.bz2
-wait
-mv  aria2-1.33.1-linux-gnu-64bit-build1 aria2
-wait
-cd aria2
-wait
-make install
-wait
-if [ -d "${aria2_path}" ]; then
-echo 'aria2 path have been exist'
-else
-mkdir ${aria2_path}
-wait
-fi
-if [ -f "${aria2_path}/aria2.session" ]&&[ -f "${aria2_path}/aria2.log" ]&&[ -f "${aria2_path}/aria2.conf" ]; then
-echo "aria2 aria2.session have been exist"
-echo "aria2 aria2.aria2.log have been exist"
-echo "aria2 aria2.aria2.conf have been exist"
-else
-touch ${aria2_path}/aria2.session || continue
-wait
-touch ${aria2_path}/aria2.log || continue
-wait
-touch ${aria2_path}/aria2.conf || continue
-wait
-fi
-
+New_Aria2_Version=$(wget --no-check-certificate -qO- https://api.github.com/repos/king567/Aria2-static-build-128-thread/releases | grep -o '"tag_name": ".*"' |head -n 1| sed 's/"//g;s/v//g'| sed 's/tag_name: //g' | sed 's/release-//g')
+###########################
+Conf_File ()
+{
 echo '## 被註釋的選項填寫的是默認值, 建議在需要修改時再取消註釋 ##
-
 ## 文件保存相關 ##
-
 # 文件的保存路徑(可使用絕對路徑或相對路徑), 默認: 當前啟動位置
 dir=~/downloads
 # 啟用磁盤緩存, 0為禁用緩存, 需1.16以上版本, 默認:16M
@@ -114,34 +76,90 @@ rpc-secret=Happydaygo4
 # 設置的RPC訪問用戶名, 此選項新版已廢棄, 建議改用 --rpc-secret 選項
 #rpc-user=<USER>
 # 設置的RPC訪問密碼, 此選項新版已廢棄, 建議改用 --rpc-secret 選項
-#rpc-passwd=<PASSWD>' > /root/.aria2/aria2.conf
+#rpc-passwd=<PASSWD>'
+}
+initializeANSI()
+{
+  esc=""
+
+  blackf="${esc}[30m";   redf="${esc}[31m";    greenf="${esc}[32m"
+  yellowf="${esc}[33m"   bluef="${esc}[34m";   purplef="${esc}[35m"
+  cyanf="${esc}[36m";    whitef="${esc}[37m"
+  
+  blackb="${esc}[40m";   redb="${esc}[41m";    greenb="${esc}[42m"
+  yellowb="${esc}[43m"   blueb="${esc}[44m";   purpleb="${esc}[45m"
+  cyanb="${esc}[46m";    whiteb="${esc}[47m"
+
+  boldon="${esc}[1m";    boldoff="${esc}[22m"
+  italicson="${esc}[3m"; italicsoff="${esc}[23m"
+  ulon="${esc}[4m";      uloff="${esc}[24m"
+  invon="${esc}[7m";     invoff="${esc}[27m"
+
+  reset="${esc}[0m"
+}
+initializeANSI
+Install_Aria2 ()
+{
+wget https://github.com/king567/Aria2-static-build-128-thread/releases/download/${New_Aria2_Version}/aria2-${New_Aria2_Version}-static-build-128-thread.tar.gz
+wait
+tar -zxvf aria2-${New_Aria2_Version}-static-build-128-thread.tar.gz
+mv aria2-${New_Aria2_Version}-static-build-128-thread aria2
+cd aria2
+wait
+sh install.sh
+wait
+if [ -d "${aria2_path}" ]; then
+echo 'aria2 path have been exist'
+else
+mkdir ${aria2_path}
+wait
+fi
+if [ -f "${aria2_path}/aria2.session" ]&&[ -f "${aria2_path}/aria2.log" ]&&[ -f "${aria2_path}/aria2.conf" ]; then
+echo "aria2 aria2.session have been exist"
+echo "aria2 aria2.aria2.log have been exist"
+echo "aria2 aria2.aria2.conf have been exist"
+else
+touch ${aria2_path}/aria2.session || continue
+wait
+touch ${aria2_path}/aria2.log || continue
+wait
+touch ${aria2_path}/aria2.conf || continue
+wait
+fi
+Conf_File > /root/.aria2/aria2.conf
 	echo "安裝成功"
 	read -p "Press any key to continue." var
 	clear
-	;;
-	2)
+}
+
+Start ()
+{
 aria2c --conf-path="/root/.aria2/aria2.conf" -D
 wait
-echo "啟動成功"
+echo -e ${greenf}"\n啟動成功\n"${reset}
 	read -p "Press any key to continue." var
 	clear
-	;;
-	3)
+}
+
+Stop ()
+{
 if [ -f "/usr/bin/killall" ]; then
 continue
 else
-echo "安裝killall中..."
+echo -e ${greenf}"\n安裝killall中...\n"${reset}
 yum install psmisc -y || apt-get  -y install psmisc 
 wait
-echo "安裝killall成功"
+echo -e ${greenf}"\n安裝killall成功\n"${reset}
 fi
 killall aria2c
 wait
-echo "已關閉aria2"
+echo -e ${redf}"\n已關閉aria2\n"${reset}
 	read -p "Press any key to continue." var
 	clear
-	;;
-	4)
+}
+
+centos7_add_boost_up ()
+{
 if [ -f "/usr/bin/killall" ]; then
 continue
 else
@@ -173,9 +191,11 @@ echo "Centos7添加開機自啟成功"
 echo "相關指令為systemctl (start|status|stop|enable) aria2.service"
 	read -p "Press any key to continue." var
 	clear
-	;;
-	5)
 	
+}
+
+Ubuntu_add_boost_up ()
+{
 touch /etc/init.d/aria2c
 chmod 755 /etc/init.d/aria2c
 
@@ -215,14 +235,17 @@ echo "Ubuntu添加開機自啟成功"
 echo "相關指令為service aria2c (start|stop|restart)"
 	read -p "Press any key to continue." var
 	clear
-	;;
-	6)
+
+}
+
+Edit_Conf_file ()
+{
 vim ${aria2_path}/aria2.conf
 wait
-	;;
-	7)
-killall aria2c
-wait
+}
+
+Uninstall ()
+{
 killall aria2c
 wait
 rm -rf /usr/bin/aria2c
@@ -237,15 +260,51 @@ rm -rf /usr/lib/systemd/system/aria2.service
 rm -rf /etc/init.d/aria2c
 rm -rf /root/aria2-1.33.1-linux-gnu-64bit-build1.tar.bz2
 rm -rf /root/aria2
-echo "解除安裝完成"
+echo -e ${greenf}"\解除安裝完成\n"${reset}
 read -p "Press any key to continue." var
-clear
-	;;
-	8)
-	read -p "Press any key to continue." var
-	clear
-break
-	;;
+}
 
-esac
-done
+Exit ()
+{
+	read -p "Press any key to continue." var
+break
+}
+
+echo "(1).安裝aria2"
+echo "(2).啟動aria2"
+echo "(3).停止aria2"
+echo "(4).將aria2加入開機啟動 for Centos7"
+echo "(5).將aria2加入開機啟動 for Ubuntu"
+echo "(6).編輯aria2設定檔"
+echo "(7).解除安裝aria2"
+echo "(8).離開"
+read -p "請輸入選項(1-8):" option
+    case ${option} in
+       1)
+			Install_Aria2
+         ;;
+       2)
+			Start
+         ;;
+       3)
+			Stop
+         ;;
+       4)
+			centos7_add_boost_up
+         ;;
+       5)
+			Ubuntu_add_boost_up
+         ;;
+       6)
+			Edit_Conf_file
+         ;;
+       7)
+			Uninstall
+         ;;
+       8)
+			Exit
+         ;;
+       *)
+         echo -e ${redf}"\n輸入錯誤選項\n"${reset}
+         ;;
+    esac
