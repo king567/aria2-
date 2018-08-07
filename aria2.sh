@@ -176,6 +176,7 @@ else
 touch ${aria2_path}/aria2.session && touch ${aria2_path}/aria2.log && touch ${aria2_path}/aria2.conf
 echo "創建基本配置成功"
 fi
+rm -rf ${Default_Path}/aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
 Conf_File > /root/.aria2/aria2.conf
 	echo "安裝成功"
 	read -p "Press any key to continue." var
@@ -245,7 +246,6 @@ rm -rf ${aria2_path}/aria2.conf
 rm -rf ${aria2_path}/start.sh
 rm -rf /usr/lib/systemd/system/aria2.service
 rm -rf /etc/init.d/aria2c
-rm -rf ${Default_Path}/aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
 rm -rf ${Default_Path}/aria2
 systemctl daemon-reload
 echo -e ${greenf}"\n解除安裝完成\n"${reset}
