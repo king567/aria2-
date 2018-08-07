@@ -146,8 +146,8 @@ Description=Aria2 Service
 [Service]
 User=root
 Type=forking
-ExecStart=/usr/bin/sh ${aria2_path}/start.sh
-ExecStop=/usr/bin/sh ${aria2_path}/stop.sh
+ExecStart=${aria2_path}/start.sh
+ExecStop=${aria2_path}/stop.sh
 [Install]
 WantedBy=multi-user.target"
 }
@@ -206,10 +206,17 @@ fi
 chmod +x ${aria2_path}/start.sh
 chmod 644 /usr/lib/systemd/system/aria2.service
 wait
-echo "${aria2c}
+cat > ${aria2_path}/start.sh <<EOF
+#!/bin/bash
+aria2c="/usr/bin/aria2c"
 ARIA2C_CONF_FILE="${aria2_path}/aria2.conf"
-aria2c --conf-path="${aria2_path}/aria2.conf" -D" > ${aria2_path}/start.sh
-echo 'kill -9 `pgrep aria2c`' > ${aria2_path}/stop.sh
+aria2c --conf-path="${aria2_path}/aria2.conf" -D
+EOF
+cat > ${aria2_path}/stop.sh <<EOF
+#!/bin/bash
+kill="/bin/kill"
+${kill} -9 `pgrep aria2c`
+EOF
 wait
 Systemd_Cond > /usr/lib/systemd/system/aria2.service
 echo "Centos7添加開機自啟成功"
