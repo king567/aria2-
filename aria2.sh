@@ -98,6 +98,57 @@ initializeANSI()
   reset="${esc}[0m"
 }
 initializeANSI
+
+kill_Aria2_Proccess ()
+{
+kill -9 `pgrep aria2c`
+}
+Init_Cond ()
+{
+echo '#!/bin/sh
+### BEGIN INIT INFO
+# Provides: aria2
+# Required-Start: $remote_fs $network
+# Required-Stop: $remote_fs $network
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Aria2 Downloader
+### END INIT INFO
+ 
+case "$1" in
+start)
+ 
+ echo -n "已開啟Aria2c"
+ aria2c --conf-path="/root/.aria2/aria2.conf" -D
+
+;;
+stop)
+ 
+ echo -n "已關閉Aria2c"
+ kill -9 `pgrep aria2c`
+;;
+restart)
+ 
+ kill -9 `pgrep aria2c`
+ aria2c --conf-path="/root/.aria2/aria2.conf" -D
+ 
+;;
+esac
+exit'
+}
+
+Systemd_Cond ()
+{
+echo "[Unit]
+Description=Aria2 Service
+[Service]
+User=root
+Type=forking
+ExecStart=/usr/bin/sh /root/.aria2/start.sh
+ExecStop=/bin/kill -9 `pgrep aria2c`
+[Install]
+WantedBy=multi-user.target"
+}
 Install_Aria2 ()
 {
 wget https://github.com/king567/Aria2-static-build-128-thread/releases/download/v${New_Aria2_Version}/aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
@@ -138,104 +189,45 @@ aria2c --conf-path="/root/.aria2/aria2.conf" -D
 wait
 echo -e ${greenf}"\n啟動成功\n"${reset}
 	read -p "Press any key to continue." var
-	
 }
 
 Stop ()
 {
-if [ -f "/usr/bin/killall" ]; then
-continue
-else
-echo -e ${greenf}"\n安裝killall中...\n"${reset}
-yum install psmisc -y || apt-get  -y install psmisc 
-wait
-echo -e ${greenf}"\n安裝killall成功\n"${reset}
-fi
-killall aria2c
-wait
-echo -e ${redf}"\n已關閉aria2\n"${reset}
-	read -p "Press any key to continue." var
-	
+kill_Aria2_Proccess
 }
 
 centos7_add_boost_up ()
 {
-if [ -f "/usr/bin/killall" ]; then
-continue
-else
-echo "安裝killall中..."
-yum install psmisc -y
-wait
-echo "安裝killall成功"
-fi
+kill_Aria2_Proccess
 touch ${aria2_path}/start.sh
+if [ -d "/usr/lib/systemd/system" ];then
 touch /usr/lib/systemd/system/aria2.service
-wait
+else
+mkdir /usr/lib/systemd/system && chmod 755 /usr/lib/systemd/system
+touch /usr/lib/systemd/system/aria2.service && chmod 644 /usr/lib/systemd/system/aria2.service
+fi
 chmod +x ${aria2_path}/start.sh
-chmod 754 /usr/lib/systemd/system/aria2.service
+chmod 644 /usr/lib/systemd/system/aria2.service
 wait
 echo "aria2c="/usr/bin/aria2c"
 ARIA2C_CONF_FILE="${aria2_path}/aria2.conf"
 aria2c --conf-path="${aria2_path}/aria2.conf" -D" > ${aria2_path}/start.sh
 wait
-echo "[Unit]
-Description=Aria2 Service
-[Service]
-User=root
-Type=forking
-ExecStart=/usr/bin/sh /root/.aria2/start.sh
-ExecStop=/usr/bin/killall aria2c
-[Install]
-WantedBy=multi-user.target" > /usr/lib/systemd/system/aria2.service
+Systemd_Cond > /usr/lib/systemd/system/aria2.service
 echo "Centos7添加開機自啟成功"
 echo "相關指令為systemctl (start|status|stop|enable) aria2.service"
 	read -p "Press any key to continue." var
-	
-	
 }
 
 Ubuntu_add_boost_up ()
 {
 touch /etc/init.d/aria2c
 chmod 755 /etc/init.d/aria2c
-
-echo '#!/bin/sh
-### BEGIN INIT INFO
-# Provides: aria2
-# Required-Start: $remote_fs $network
-# Required-Stop: $remote_fs $network
-# Default-Start: 2 3 4 5
-# Default-Stop: 0 1 6
-# Short-Description: Aria2 Downloader
-### END INIT INFO
- 
-case "$1" in
-start)
- 
- echo -n "已開啟Aria2c"
- aria2c --conf-path="/root/.aria2/aria2.conf" -D
-
-;;
-stop)
- 
- echo -n "已關閉Aria2c"
- killall aria2c
-;;
-restart)
- 
- killall aria2c
- aria2c --conf-path="/root/.aria2/aria2.conf" -D
- 
-;;
-esac
-exit' > /etc/init.d/aria2c
-wait
+Init_Cond > /etc/init.d/aria2c
 update-rc.d aria2c defaults
 echo "Ubuntu添加開機自啟成功"
 echo "相關指令為service aria2c (start|stop|restart)"
-	read -p "Press any key to continue." var
-	
-
+read -p "Press any key to continue." var
 }
 
 Edit_Conf_file ()
@@ -246,7 +238,7 @@ wait
 
 Uninstall ()
 {
-killall aria2c
+kill_Aria2_Proccess
 wait
 rm -rf /usr/bin/aria2c
 rm -rf /usr/share/man/man1/aria2c.1/man-aria2c
