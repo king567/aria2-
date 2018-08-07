@@ -220,6 +220,7 @@ $kill -9 `pgrep aria2c`
 EOF
 wait
 Systemd_Cond > /usr/lib/systemd/system/aria2.service
+systemctl daemon-reload
 echo "Centos7添加開機自啟成功"
 echo "相關指令為systemctl (start|status|stop|enable) aria2.service"
 	read -p "Press any key to continue." var
