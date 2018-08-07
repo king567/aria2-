@@ -103,7 +103,7 @@ initializeANSI
 
 kill_Aria2_Proccess ()
 {
-kill -9 `pgrep aria2c`
+kill -9 `pgrep aria2c` &> /dev/null
 }
 Init_Cond ()
 {
