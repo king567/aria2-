@@ -271,7 +271,7 @@ echo "(6).編輯aria2設定檔"
 echo "(7).解除安裝aria2"
 echo "(8).更新腳本"
 echo "(9).離開"
-read -p "請輸入選項(1-8):" option
+read -p "請輸入選項(1-9):" option
     case ${option} in
        1)
 			Install_Aria2
