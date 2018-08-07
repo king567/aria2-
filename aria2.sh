@@ -208,6 +208,7 @@ chmod 644 /usr/lib/systemd/system/aria2.service
 wait
 cat > ${aria2_path}/start.sh <<'EOF'
 #!/bin/bash
+aria2_path="/root/.aria2"
 aria2c="/usr/bin/aria2c"
 ARIA2C_CONF_FILE="${aria2_path}/aria2.conf"
 $aria2c --conf-path="${aria2_path}/aria2.conf" -D
