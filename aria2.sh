@@ -245,8 +245,8 @@ rm -rf ${aria2_path}/aria2.conf
 rm -rf ${aria2_path}/start.sh
 rm -rf /usr/lib/systemd/system/aria2.service
 rm -rf /etc/init.d/aria2c
-rm -rf /root/aria2-1.33.1-linux-gnu-64bit-build1.tar.bz2
-rm -rf /root/aria2
+rm -rf ${Default_Path}/aria2-1.33.1-linux-gnu-64bit-build1.tar.bz2
+rm -rf ${Default_Path}/aria2
 systemctl daemon-reload
 echo -e ${greenf}"\n解除安裝完成\n"${reset}
 read -p "Press any key to continue." var
