@@ -262,6 +262,8 @@ Update_script ()
 wget --no-check-certificate -qO- https://raw.githubusercontent.com/king567/aria2-one-click-byWIJ/master/aria2.sh > $0
 echo -e ${greenf}"\n更新成功\n"${reset}
 }
+for ((i=0; i<=1 ; ))
+do
 echo "(1).安裝aria2"
 echo "(2).啟動aria2"
 echo "(3).停止aria2"
@@ -304,3 +306,4 @@ read -p "請輸入選項(1-9):" option
          echo -e ${redf}"\n輸入錯誤選項\n"${reset}
          ;;
     esac
+done
