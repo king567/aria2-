@@ -3,6 +3,7 @@
 ###########################變數
 touch="/bin/touch"
 wget="/usr/bin/wget"
+kill="/bin/kill"
 aria2_path="/root/.aria2"
 aria2c="/usr/bin/aria2c"
 Default_Path="/root"
@@ -206,16 +207,20 @@ fi
 chmod +x ${aria2_path}/start.sh
 chmod 644 /usr/lib/systemd/system/aria2.service
 wait
+Ari2='$aria2c'
 cat > ${aria2_path}/start.sh <<EOF
 #!/bin/bash
 aria2c="/usr/bin/aria2c"
 ARIA2C_CONF_FILE="${aria2_path}/aria2.conf"
-aria2c --conf-path="${aria2_path}/aria2.conf" -D
+$Ari2 --conf-path="${aria2_path}/aria2.conf" -D
 EOF
+Paria='`pgrep aria2c`'
+kefo='kill="/bin/kill"'
+kfso='$kill'
 cat > ${aria2_path}/stop.sh <<EOF
 #!/bin/bash
-kill="/bin/kill"
-${kill} -9 `pgrep aria2c`
+$kefo
+$kfso -9 $Paria
 EOF
 wait
 Systemd_Cond > /usr/lib/systemd/system/aria2.service
