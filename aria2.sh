@@ -153,7 +153,7 @@ WantedBy=multi-user.target"
 }
 Install_Aria2 ()
 {
-cd Default_Path
+cd ${Default_Path}
 wget https://github.com/king567/Aria2-static-build-128-thread/releases/download/v${New_Aria2_Version}/aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
 wait
 tar -zxvf aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
