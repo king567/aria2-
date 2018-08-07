@@ -129,7 +129,7 @@ fi
 Conf_File > /root/.aria2/aria2.conf
 	echo "安裝成功"
 	read -p "Press any key to continue." var
-	clear
+	
 }
 
 Start ()
@@ -138,7 +138,7 @@ aria2c --conf-path="/root/.aria2/aria2.conf" -D
 wait
 echo -e ${greenf}"\n啟動成功\n"${reset}
 	read -p "Press any key to continue." var
-	clear
+	
 }
 
 Stop ()
@@ -155,7 +155,7 @@ killall aria2c
 wait
 echo -e ${redf}"\n已關閉aria2\n"${reset}
 	read -p "Press any key to continue." var
-	clear
+	
 }
 
 centos7_add_boost_up ()
@@ -190,7 +190,7 @@ WantedBy=multi-user.target" > /usr/lib/systemd/system/aria2.service
 echo "Centos7添加開機自啟成功"
 echo "相關指令為systemctl (start|status|stop|enable) aria2.service"
 	read -p "Press any key to continue." var
-	clear
+	
 	
 }
 
@@ -234,7 +234,7 @@ update-rc.d aria2c defaults
 echo "Ubuntu添加開機自啟成功"
 echo "相關指令為service aria2c (start|stop|restart)"
 	read -p "Press any key to continue." var
-	clear
+	
 
 }
 
@@ -266,7 +266,7 @@ read -p "Press any key to continue." var
 
 Exit ()
 {
-	read -p "Press any key to continue." var
+read -p "Press any key to continue." var
 break
 }
 Update_script ()
