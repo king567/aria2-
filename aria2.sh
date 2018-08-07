@@ -4,6 +4,8 @@
 touch="/bin/touch"
 wget="/usr/bin/wget"
 aria2_path="/root/.aria2"
+aria2c="/usr/bin/aria2c"
+Default_Path="/root"
 New_Aria2_Version=$(wget --no-check-certificate -qO- https://api.github.com/repos/king567/Aria2-static-build-128-thread/releases | grep -o '"tag_name": ".*"' |head -n 1| sed 's/"//g;s/v//g'| sed 's/tag_name: //g' | sed 's/release-//g')
 ###########################
 Conf_File ()
@@ -100,9 +102,7 @@ initializeANSI()
 initializeANSI
 
 kill_Aria2_Proccess ()
-{
-kill -9 `pgrep aria2c`
-}
+{kill -9 `pgrep aria2c`}
 Init_Cond ()
 {
 echo '#!/bin/sh
@@ -151,6 +151,7 @@ WantedBy=multi-user.target"
 }
 Install_Aria2 ()
 {
+cd Default_Path
 wget https://github.com/king567/Aria2-static-build-128-thread/releases/download/v${New_Aria2_Version}/aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
 wait
 tar -zxvf aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
@@ -170,12 +171,8 @@ echo "aria2 aria2.session have been exist"
 echo "aria2 aria2.aria2.log have been exist"
 echo "aria2 aria2.aria2.conf have been exist"
 else
-touch ${aria2_path}/aria2.session || continue
-wait
-touch ${aria2_path}/aria2.log || continue
-wait
-touch ${aria2_path}/aria2.conf || continue
-wait
+touch ${aria2_path}/aria2.session && touch ${aria2_path}/aria2.log && touch ${aria2_path}/aria2.conf
+echo "創建基本配置成功"
 fi
 Conf_File > /root/.aria2/aria2.conf
 	echo "安裝成功"
@@ -191,10 +188,6 @@ echo -e ${greenf}"\n啟動成功\n"${reset}
 	read -p "Press any key to continue." var
 }
 
-Stop ()
-{
-kill_Aria2_Proccess
-}
 
 centos7_add_boost_up ()
 {
@@ -209,7 +202,7 @@ fi
 chmod +x ${aria2_path}/start.sh
 chmod 644 /usr/lib/systemd/system/aria2.service
 wait
-echo "aria2c="/usr/bin/aria2c"
+echo "${aria2c}
 ARIA2C_CONF_FILE="${aria2_path}/aria2.conf"
 aria2c --conf-path="${aria2_path}/aria2.conf" -D" > ${aria2_path}/start.sh
 wait
@@ -240,7 +233,7 @@ Uninstall ()
 {
 kill_Aria2_Proccess
 wait
-rm -rf /usr/bin/aria2c
+rm -rf ${aria2c}
 rm -rf /usr/share/man/man1/aria2c.1/man-aria2c
 rm -rf /usr/share/man/man1/aria2c.1
 rm -rf /etc/ssl/certs/ca-certificates.crt 
@@ -252,6 +245,7 @@ rm -rf /usr/lib/systemd/system/aria2.service
 rm -rf /etc/init.d/aria2c
 rm -rf /root/aria2-1.33.1-linux-gnu-64bit-build1.tar.bz2
 rm -rf /root/aria2
+systemctl daemon-reload
 echo -e ${greenf}"\n解除安裝完成\n"${reset}
 read -p "Press any key to continue." var
 }
@@ -284,7 +278,7 @@ read -p "請輸入選項(1-8):" option
 			Start
          ;;
        3)
-			Stop
+			kill_Aria2_Proccess
          ;;
        4)
 			centos7_add_boost_up
