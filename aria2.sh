@@ -146,8 +146,8 @@ Description=Aria2 Service
 [Service]
 User=root
 Type=forking
-ExecStart=/usr/bin/sh /root/.aria2/start.sh
-ExecStop=/bin/kill -9 `pgrep aria2c`
+ExecStart=/usr/bin/sh ${aria2_path}/start.sh
+ExecStop=/usr/bin/sh ${aria2_path}/stop.sh
 [Install]
 WantedBy=multi-user.target"
 }
@@ -196,6 +196,7 @@ centos7_add_boost_up ()
 {
 kill_Aria2_Proccess
 touch ${aria2_path}/start.sh
+touch ${aria2_path}/stop.sh
 if [ -d "/usr/lib/systemd/system" ];then
 touch /usr/lib/systemd/system/aria2.service
 else
@@ -208,6 +209,7 @@ wait
 echo "${aria2c}
 ARIA2C_CONF_FILE="${aria2_path}/aria2.conf"
 aria2c --conf-path="${aria2_path}/aria2.conf" -D" > ${aria2_path}/start.sh
+echo 'kill -9 `pgrep aria2c`' > ${aria2_path}/stop.sh
 wait
 Systemd_Cond > /usr/lib/systemd/system/aria2.service
 echo "Centos7添加開機自啟成功"
