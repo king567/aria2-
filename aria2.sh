@@ -294,6 +294,7 @@ read -p "請輸入選項(1-9):" option
          ;;
        3)
 			kill_Aria2_Proccess
+			echo -e ${redf}"\n停止成功\n"${reset}
          ;;
        4)
 			centos7_add_boost_up
