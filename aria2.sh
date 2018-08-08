@@ -310,6 +310,7 @@ read -p "請輸入選項(1-9):" option
          ;;
        8)
 			Update_script
+			break
          ;;
        9)
 			Exit
