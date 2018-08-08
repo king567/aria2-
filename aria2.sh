@@ -181,6 +181,16 @@ Conf_File > /root/.aria2/aria2.conf
 echo -e ${greenf}"\n安裝成功\n"${reset}
 }
 
+Now_status ()
+{
+Pgrep=`pgrep aria2c`
+echo "目前狀態："
+if $Pgrep 1>/dev/null 2>&1; then
+    echo -e ${greenf}"\nAtive\n"${reset}
+else
+    echo -e ${redf}"\nStop\n"${reset}
+fi
+}
 Start ()
 {
 aria2c --conf-path="/root/.aria2/aria2.conf" -D
@@ -271,8 +281,8 @@ do
 echo "(1).安裝aria2"
 echo "(2).啟動aria2"
 echo "(3).停止aria2"
-echo "(4).以Systemctl加入開機啟動"
-echo "(5).以init.d加入開機啟動"
+echo "(4).查看目前狀態"
+echo "(5).以Systemctl加入開機啟動"
 echo "(6).編輯aria2設定檔"
 echo "(7).解除安裝aria2"
 echo "(8).更新腳本"
@@ -290,10 +300,23 @@ read -p "請輸入選項(1-9):" option
 			echo -e ${redf}"\n停止成功\n"${reset}
          ;;
        4)
-			Systemctl_boost_up
+			Now_status
          ;;
        5)
-			init_d_boost_up
+			echo "(1).以Systemctl加入開機啟動"
+			echo "(2).以init.d加入開機啟動"
+			read -p "請輸入選項(1-2)：" choose_boot
+				case ${choose_boot} in
+					1)
+						Systemctl_boost_up
+					;;
+					2)
+						init_d_boost_up
+					;;
+					*)
+						echo -e ${redf}"\n輸入錯誤選項\n"${reset}
+					;;
+				esac
          ;;
        6)
 			Edit_Conf_file
