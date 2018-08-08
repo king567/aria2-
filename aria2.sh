@@ -192,7 +192,7 @@ echo -e ${greenf}"\n啟動成功\n"${reset}
 }
 
 
-centos7_add_boost_up ()
+Systemctl_boost_up ()
 {
 kill_Aria2_Proccess
 touch ${aria2_path}/start.sh
@@ -226,7 +226,7 @@ echo "相關指令為systemctl (start|status|stop|enable) aria2.service"
 	read -p "Press any key to continue." var
 }
 
-Ubuntu_add_boost_up ()
+init_d_boost_up ()
 {
 touch /etc/init.d/aria2c
 chmod 755 /etc/init.d/aria2c
@@ -278,8 +278,8 @@ do
 echo "(1).安裝aria2"
 echo "(2).啟動aria2"
 echo "(3).停止aria2"
-echo "(4).將aria2加入開機啟動 for Centos7"
-echo "(5).將aria2加入開機啟動 for Ubuntu"
+echo "(4).以Systemctl加入開機啟動"
+echo "(5).以init.d加入開機啟動"
 echo "(6).編輯aria2設定檔"
 echo "(7).解除安裝aria2"
 echo "(8).更新腳本"
@@ -297,10 +297,10 @@ read -p "請輸入選項(1-9):" option
 			echo -e ${redf}"\n停止成功\n"${reset}
          ;;
        4)
-			centos7_add_boost_up
+			Systemctl_boost_up
          ;;
        5)
-			Ubuntu_add_boost_up
+			init_d_boost_up
          ;;
        6)
 			Edit_Conf_file
