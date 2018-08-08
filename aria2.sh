@@ -174,13 +174,12 @@ echo "aria2 aria2.aria2.log have been exist"
 echo "aria2 aria2.aria2.conf have been exist"
 else
 touch ${aria2_path}/aria2.session && touch ${aria2_path}/aria2.log && touch ${aria2_path}/aria2.conf
-echo "創建基本配置成功"
+echo -e ${greenf}"\n創建基本配置成功\n"${reset}
 fi
 rm -rf ${Default_Path}/aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
 Conf_File > /root/.aria2/aria2.conf
-	echo "安裝成功"
-	read -p "Press any key to continue." var
-	
+echo -e ${greenf}"\n安裝成功\n"${reset}
+read -p "Press any key to continue." var
 }
 
 Start ()
