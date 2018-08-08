@@ -183,9 +183,8 @@ echo -e ${greenf}"\n安裝成功\n"${reset}
 
 Now_status ()
 {
-Pgrep=`pgrep aria2c`
 echo "目前狀態："
-if $Pgrep 1>/dev/null 2>&1; then
+if pgrep aria2c 1>/dev/null 2>&1; then
     echo -e ${greenf}"\nAtive\n"${reset}
 else
     echo -e ${redf}"\nStop\n"${reset}
