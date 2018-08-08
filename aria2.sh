@@ -179,7 +179,6 @@ fi
 rm -rf ${Default_Path}/aria2-v${New_Aria2_Version}-static-build-128-thread.tar.gz
 Conf_File > /root/.aria2/aria2.conf
 echo -e ${greenf}"\n安裝成功\n"${reset}
-read -p "Press any key to continue." var
 }
 
 Start ()
@@ -187,7 +186,6 @@ Start ()
 aria2c --conf-path="/root/.aria2/aria2.conf" -D
 wait
 echo -e ${greenf}"\n啟動成功\n"${reset}
-	read -p "Press any key to continue." var
 }
 
 
@@ -222,7 +220,6 @@ Systemd_Cond > /usr/lib/systemd/system/aria2.service
 systemctl daemon-reload
 echo "Centos7添加開機自啟成功"
 echo "相關指令為systemctl (start|status|stop|enable) aria2.service"
-	read -p "Press any key to continue." var
 }
 
 init_d_boost_up ()
@@ -233,7 +230,6 @@ Init_Cond > /etc/init.d/aria2c
 update-rc.d aria2c defaults
 echo "Ubuntu添加開機自啟成功"
 echo "相關指令為service aria2c (start|stop|restart)"
-read -p "Press any key to continue." var
 }
 
 Edit_Conf_file ()
@@ -259,12 +255,10 @@ rm -rf /etc/init.d/aria2c
 rm -rf ${Default_Path}/aria2
 systemctl daemon-reload
 echo -e ${greenf}"\n解除安裝完成\n"${reset}
-read -p "Press any key to continue." var
 }
 
 Exit ()
 {
-read -p "Press any key to continue." var
 break
 }
 Update_script ()
@@ -309,7 +303,7 @@ read -p "請輸入選項(1-9):" option
          ;;
        8)
 			Update_script
-			break
+			Exit
          ;;
        9)
 			Exit
